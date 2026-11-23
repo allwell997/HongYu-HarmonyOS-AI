@@ -1,5 +1,7 @@
 # 鸿语 · HarmonyOS AI 助手
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 一个面向 HarmonyOS NEXT 的原生 ArkTS AI 聊天应用，**默认接入 DeepSeek 官方 API**。
 交互参考 DeepSeek App：左侧/抽屉式多会话列表、连续多轮对话、一次最多 9 张图片上传、
 系统相机拍照、DeepSeek 聊天记录导入、回复语音朗读，同时兼容任意 OpenAI Chat Completions 接口。
@@ -346,7 +348,9 @@ Base URL 或模型名填错。DeepSeek 官方 Base URL 应为 `https://api.deeps
 
 ## License
 
-仓库目前未附加开源许可证，保留所有权利。  
-如需将本项目用于商业分发或开源发布，请先添加合适的 `LICENSE` 并确认第三方服务条款。
+本项目使用 **MIT License** 开源，版权归 allwell997 所有。  
+你可以自由使用、修改、分发和商用，但需保留版权声明和许可证文本。详见 [LICENSE](LICENSE)。
+
+> “DeepSeek”名称和相关商标归其权利人所有；本项目不是 DeepSeek 官方产品。
 
 本项目仅用于学习和演示，请遵守 DeepSeek 及所接入模型服务的使用条款以及所在地法律法规。
