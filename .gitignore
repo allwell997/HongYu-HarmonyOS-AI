@@ -1,0 +1,33 @@
+# DevEco Studio / HarmonyOS
+.idea/
+.local/
+local.properties
+oh_modules/
+node_modules/
+.hvigor/
+.cxx/
+build/
+entry/build/
+dist/
+copyright/
+*.hap
+*.app
+*.hsp
+*.har
+build-profile.backup.json5
+
+# Signing material (never commit)
+keys/
+*.p12
+*.cer
+*.p7b
+*.csr
+
+# Logs / local test artifacts
+*.log
+prefs.bin
+*.jpeg
+
+# OS
+.DS_Store
+Thumbs.db

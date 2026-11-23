@@ -1,0 +1,16 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "鸿语主模块"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "多会话 AI 助手"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "鸿语"
+    }
+  ]
+}

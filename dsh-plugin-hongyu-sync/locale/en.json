@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "title": "HongYu Sync Bridge",
+    "description": "Sync text conversations between the HongYu HarmonyOS app and DeepSeek Harness over your local network, and export the current DSH chat to the phone.",
+    "detail": "docs/DETAIL.md"
+  }
+}

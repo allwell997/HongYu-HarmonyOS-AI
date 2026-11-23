@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "title": "鸿语同步桥",
+    "description": "通过局域网在鸿语 HarmonyOS App 与 DeepSeek Harness 之间同步文字对话，并可将当前 DSH 对话导出给手机。",
+    "detail": "docs/DETAIL.md"
+  }
+}
