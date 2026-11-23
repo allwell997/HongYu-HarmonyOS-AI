@@ -7,6 +7,8 @@
 系统相机拍照、DeepSeek 聊天记录导入、回复语音朗读，同时兼容任意 OpenAI Chat Completions 接口。
 项目还附带一个 **DeepSeek Harness 同步插件**，可在同一局域网内与手机双向同步文字对话。
 
+**源码下载**：[GitHub Release v1.0.0](https://github.com/allwell997/HongYu-HarmonyOS-AI/releases/tag/v1.0.0)（Source code zip） · [仓库](https://github.com/allwell997/HongYu-HarmonyOS-AI)
+
 ![应用图标](AppScope/resources/base/media/app_icon.png)
 
 > **重要说明**
