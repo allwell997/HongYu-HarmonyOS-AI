@@ -14,6 +14,7 @@
 > - 使用前需要在应用内填写你自己的 DeepSeek API Key，费用由你的 DeepSeek 账号承担。
 > - 仓库**不包含任何 API Key、签名证书、私钥或密码**；`build-profile.json5` 已移除签名配置，请使用 DevEco Studio 自动签名或配置你自己的证书。
 > - “贝壳/白浪”是 DeepSeek App 私有音色，公开 TTS API 不提供；本项目使用官方公开的海星/暗潮和系统离线音色。
+> - **下载、安装、使用本软件造成的任何损失由使用者自行承担**，详见 [DISCLAIMER.md](DISCLAIMER.md)。
 
 ## 界面预览
 
@@ -65,7 +66,34 @@
 > 如果使用更高的 SDK 版本，DevEco 会提示升级 `compatibleSdkVersion`，按向导升级即可。
 > 交付内容是完整源码工程，不包含已签名的 HAP；需要在 DevEco Studio 中签名并安装到真机。
 
+## 下载与安装
+
+### 普通用户
+
+**HarmonyOS 不能像 Android APK 一样直接点击 HAP 安装。** 公开安装的正式渠道是华为应用市场（AppGallery）：
+
+1. 应用上架后，在华为应用市场搜索“鸿语”安装；
+2. 或通过应用市场分享页/邀请测试安装。
+
+本仓库不会提供“下载后双击即可安装”的 HAP，因为 HarmonyOS 会校验签名、Profile 和设备 UDID，普通 release HAP 无法在任意设备上侧载。
+
+### 开发者/自用
+
+```bash
+git clone https://github.com/allwell997/HongYu-HarmonyOS-AI.git
+cd HongYu-HarmonyOS-AI
+```
+
+用 DevEco Studio 打开并配置你自己的签名：
+
+- Debug 调试：使用 DevEco 自动签名；HAP 通过 `hdc install` 安装到你已注册的设备。
+- Release 上架：使用你自己的发布证书/Profile 构建 signed `.app`，上传 AppGallery。
+- 不要把 `.p12`、`.cer`、`.p7b`、`.csr` 提交到仓库。
+
+> 侧载、修改签名、使用非官方渠道安装，可能导致安装失败、数据丢失或系统安全风险，责任由使用者承担。
+
 ## 命令行构建
+
 
 仓库中的 `build-profile.json5` **故意不包含任何签名配置**，避免泄露证书和密码。
 
