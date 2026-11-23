@@ -70,6 +70,10 @@
 
 ## 下载与安装
 
+- **安装说明书网页**：<https://allwell997.github.io/HongYu-HarmonyOS-AI/install.html>
+- **安装说明书 PDF**：[docs/HongYu-HarmonyOS-Install-Guide.pdf](docs/HongYu-HarmonyOS-Install-Guide.pdf)
+- **安装说明 Markdown**：[docs/INSTALL.md](docs/INSTALL.md)
+
 ### 普通用户
 
 **HarmonyOS 不能像 Android APK 一样直接点击 HAP 安装。** 公开安装的正式渠道是华为应用市场（AppGallery）：

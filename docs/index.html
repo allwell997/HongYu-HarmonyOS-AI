@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>鸿语 · HarmonyOS AI 对话</title>
+<style>
+  :root { --blue:#0a59f7; --text:#172033; --muted:#65708a; --bg:#f5f7fb; --card:#fff; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Microsoft YaHei","PingFang SC",sans-serif; color:var(--text); background:var(--bg); line-height:1.75; }
+  .wrap { max-width:1060px; margin:0 auto; padding:0 22px; }
+  header { background:linear-gradient(135deg,#0a59f7,#4d7cff); color:#fff; padding:54px 0 46px; }
+  .brand { display:flex; align-items:center; gap:16px; }
+  .brand img { width:64px; height:64px; border-radius:14px; background:#fff; padding:4px; }
+  h1 { margin:0; font-size:30px; letter-spacing:1px; }
+  .sub { margin:6px 0 0; opacity:.9; font-size:15px; }
+  .lead { max-width:700px; margin:22px 0 0; font-size:15px; opacity:.95; }
+  .btns { display:flex; flex-wrap:wrap; gap:12px; margin-top:26px; }
+  .btn { display:inline-block; padding:11px 20px; border-radius:999px; text-decoration:none; font-weight:600; font-size:14px; }
+  .btn.primary { background:#fff; color:var(--blue); }
+  .btn.ghost { border:1px solid rgba(255,255,255,.65); color:#fff; }
+  main { padding:38px 0 20px; }
+  .card { background:var(--card); border:1px solid #e5eaf4; border-radius:16px; padding:24px; margin-bottom:20px; box-shadow:0 6px 22px rgba(20,40,90,.04); }
+  h2 { font-size:20px; margin:0 0 14px; }
+  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .shot { background:#0b0d12; border-radius:14px; overflow:hidden; border:1px solid #e5eaf4; }
+  .shot img { width:100%; display:block; }
+  .muted { color:var(--muted); font-size:13px; }
+  .warn { border-left:4px solid #e6a23c; background:#fff8e6; color:#6f4700; padding:16px 18px; border-radius:0 10px 10px 0; font-size:14px; }
+  .warn strong { color:#5a3900; }
+  ul { padding-left:22px; margin:8px 0; }
+  li { margin:4px 0; }
+  a { color:var(--blue); }
+  footer { padding:26px 0 46px; color:var(--muted); font-size:12px; }
+  @media (max-width:760px) { .grid { grid-template-columns:1fr; } header { padding:36px 0; } h1 { font-size:25px; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <img src="app_icon.png" alt="鸿语图标">
+      <div>
+        <h1>鸿语</h1>
+        <p class="sub">HarmonyOS NEXT · AI 对话助手</p>
+      </div>
+    </div>
+    <p class="lead">多会话、多图理解、语音朗读、DeepSeek API。第三方开源客户端，需要自备 API Key。</p>
+    <div class="btns">
+      <a class="btn primary" href="install.html">查看安装说明书</a>
+      <a class="btn ghost" href="HongYu-HarmonyOS-Install-Guide.pdf">下载 PDF 说明书</a>
+      <a class="btn ghost" href="https://github.com/allwell997/HongYu-HarmonyOS-AI">GitHub 源码</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="card">
+    <h2>安装方式</h2>
+    <p><strong>普通用户：</strong>HarmonyOS NEXT 不能直接点击 HAP 安装。正式安装请等华为应用市场上架，在应用市场搜索“鸿语”。</p>
+    <p><strong>开发者：</strong>克隆源码后用 DevEco Studio 构建，debug HAP 通过 hdc 安装到已注册调试设备。</p>
+    <p class="muted">详细步骤见 <a href="install.html">安装说明书</a>，内含华为应用市场、AGC 邀请测试、指定设备发布和 hdc 调试安装说明。</p>
+  </div>
+
+  <div class="card">
+    <h2>界面预览</h2>
+    <div class="grid">
+      <div class="shot"><img src="screenshots/home.jpg" alt="鸿语欢迎页"></div>
+      <div class="shot"><img src="screenshots/reading.jpg" alt="鸿语对话与朗读"></div>
+      <div class="shot"><img src="screenshots/light.jpg" alt="鸿语浅色主题"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>主要功能</h2>
+    <ul>
+      <li>多会话、置顶、重命名、删除</li>
+      <li>多轮对话，最多 9 张图片理解</li>
+      <li>系统相机拍照、DeepSeek 聊天记录导入</li>
+      <li>系统离线朗读 / DeepSeek 在线朗读</li>
+      <li>浅色、深色、跟随系统，字体大小可调</li>
+      <li>MIT 开源，可自行构建和修改</li>
+    </ul>
+  </div>
+
+  <div class="card warn">
+    <strong>免责声明：</strong>本软件按 MIT License “AS IS” 提供，不附带任何担保。下载、安装、使用本软件造成的设备、数据、账号、API 费用、AI 内容或法律风险，由使用者自行承担。本项目不是 DeepSeek 官方应用。
+  </div>
+
+  <div class="card">
+    <h2>链接</h2>
+    <ul>
+      <li>项目主页：<a href="https://github.com/allwell997/HongYu-HarmonyOS-AI">github.com/allwell997/HongYu-HarmonyOS-AI</a></li>
+      <li>源码下载：<a href="https://github.com/allwell997/HongYu-HarmonyOS-AI/releases/tag/v1.0.0">Release v1.0.0</a></li>
+      <li>安装说明书 Markdown：<a href="INSTALL.md">docs/INSTALL.md</a></li>
+      <li>完整免责声明：<a href="https://github.com/allwell997/HongYu-HarmonyOS-AI/blob/main/DISCLAIMER.md">DISCLAIMER.md</a></li>
+    </ul>
+  </div>
+</main>
+
+<footer class="wrap">
+  鸿语 · 第三方 DeepSeek API 客户端 · MIT License · 非华为/DeepSeek 官方文档
+</footer>
+</body>
+</html>
