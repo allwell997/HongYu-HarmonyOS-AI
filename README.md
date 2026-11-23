@@ -9,6 +9,8 @@
 
 **源码下载**：[GitHub Release v1.0.0](https://github.com/allwell997/HongYu-HarmonyOS-AI/releases/tag/v1.0.0)（Source code zip） · [仓库](https://github.com/allwell997/HongYu-HarmonyOS-AI)
 
+**在线安装说明书**：<https://allwell997.github.io/HongYu-HarmonyOS-AI/>
+
 ![应用图标](AppScope/resources/base/media/app_icon.png)
 
 > **重要说明**
