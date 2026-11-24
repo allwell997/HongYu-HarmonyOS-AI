@@ -11,6 +11,8 @@
 
 **在线安装说明书**：<https://allwell997.github.io/HongYu-HarmonyOS-AI/>
 
+**更新记录**：[CHANGELOG.md](CHANGELOG.md)
+
 ![应用图标](AppScope/resources/base/media/app_icon.png)
 
 > **重要说明**
