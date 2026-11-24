@@ -817,12 +817,37 @@ struct Index {
     return context;
   }
 
+  private buildSearchQuery(text: string): string {
+    let query: string = text;
+    const fillers: string[] = [
+      '帮我查一下', '帮我搜索一下', '帮我找一下', '帮我找一些', '帮我', '查一下', '查询一下', '搜索一下',
+      '搜一下', '找一下', '找一些', '找找', '一些', '我想知道', '告诉我', '今天', '最新', '一下', '的'
+    ];
+    for (let i = 0; i < fillers.length; i++) {
+      query = query.replace(new RegExp(fillers[i], 'g'), ' ');
+    }
+    query = query.replace(/[，。！？、,.!?]/g, ' ').replace(/\s+/g, ' ').trim();
+    if (query.length < 2) {
+      query = text.trim();
+    }
+    if (text.includes('鸿蒙') && !query.toLowerCase().includes('harmonyos')) {
+      query += ' HarmonyOS';
+    }
+    if (!query.includes('新闻') && (text.includes('新闻') || text.includes('最新'))) {
+      query += ' 新闻';
+    }
+    const now: Date = new Date();
+    const dateText: string = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+    return `${query} ${dateText}`;
+  }
+
   private async collectWebContext(text: string): Promise<string> {
     if (!this.settings.webSearchEnabled || !this.needsWebSearch(text)) {
       return '';
     }
     try {
-      const items: WebSearchItem[] = await this.webSearchService.search(text);
+      const query: string = this.buildSearchQuery(text);
+      const items: WebSearchItem[] = await this.webSearchService.search(query);
       return this.buildWebContext(items);
     } catch (error) {
       const businessError = error as Error;

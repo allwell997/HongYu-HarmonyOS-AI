@@ -1,5 +1,9 @@
 import { http } from '@kit.NetworkKit';
 import { BusinessError } from '@kit.BasicServicesKit';
+import { hilog } from '@kit.PerformanceAnalysisKit';
+
+const DOMAIN: number = 0x0001;
+const TAG: string = 'HongYuWeb';
 
 export interface WebSearchItem {
   title: string;
@@ -35,9 +39,12 @@ export class WebSearchService {
       if (response.responseCode < 200 || response.responseCode >= 300) {
         throw new Error(`搜索服务返回 HTTP ${response.responseCode}`);
       }
-      return this.parseRss(this.resultToString(response.result));
+      const xml: string = this.resultToString(response.result);
+      const items: WebSearchItem[] = this.parseRss(xml);
+      return items;
     } catch (error) {
       const businessError = error as BusinessError;
+      hilog.error(DOMAIN, TAG, 'search failed: %{public}s', businessError.message ?? 'unknown');
       throw new Error(`联网搜索失败：${businessError.message ?? '网络不可用'}`);
     } finally {
       request.destroy();
