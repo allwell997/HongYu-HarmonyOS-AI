@@ -140,6 +140,7 @@ export class AppSettings {
   dshToken: string;
   themeMode: string;
   fontScale: number;
+  webSearchEnabled: boolean;
 
   constructor() {
     this.baseUrl = 'https://api.deepseek.com';
@@ -159,6 +160,7 @@ export class AppSettings {
     this.dshToken = '';
     this.themeMode = 'system';
     this.fontScale = 1.0;
+    this.webSearchEnabled = true;
   }
 
   static fromPlain(raw: AppSettings): AppSettings {
@@ -217,6 +219,9 @@ export class AppSettings {
     if (typeof raw.fontScale === 'number') {
       settings.fontScale = Math.min(1.3, Math.max(0.85, raw.fontScale));
     }
+    if (typeof raw.webSearchEnabled === 'boolean') {
+      settings.webSearchEnabled = raw.webSearchEnabled;
+    }
     return settings;
   }
 
@@ -239,6 +244,7 @@ export class AppSettings {
     settings.dshToken = this.dshToken;
     settings.themeMode = this.themeMode;
     settings.fontScale = this.fontScale;
+    settings.webSearchEnabled = this.webSearchEnabled;
     return settings;
   }
 

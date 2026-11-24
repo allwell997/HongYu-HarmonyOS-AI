@@ -68,7 +68,8 @@ export class AiService {
     return await this.send(settings, [probe], probe);
   }
 
-  async send(settings: AppSettings, history: ChatMessage[], lastUserMessage: ChatMessage): Promise<string> {
+  async send(settings: AppSettings, history: ChatMessage[], lastUserMessage: ChatMessage,
+    webContext: string = ''): Promise<string> {
     if (settings.apiKey.trim().length === 0) {
       throw new AiError('尚未填写 API Key，请先到设置中配置。');
     }
@@ -77,7 +78,7 @@ export class AiService {
     }
 
     const url: string = this.buildEndpoint(settings.baseUrl);
-    const messages: ApiMessage[] = await this.buildMessages(settings, history, lastUserMessage);
+    const messages: ApiMessage[] = await this.buildMessages(settings, history, lastUserMessage, webContext);
     const body: ApiChatRequest = {
       model: settings.model.trim(),
       messages: messages,
@@ -143,12 +144,20 @@ export class AiService {
   }
 
   private async buildMessages(settings: AppSettings, history: ChatMessage[],
-    lastUserMessage: ChatMessage): Promise<ApiMessage[]> {
+    lastUserMessage: ChatMessage, webContext: string): Promise<ApiMessage[]> {
     const messages: ApiMessage[] = [];
     if (settings.systemPrompt.trim().length > 0) {
       messages.push({
         role: 'system',
         content: settings.systemPrompt.trim()
+      });
+    }
+    if (webContext.trim().length > 0) {
+      messages.push({
+        role: 'system',
+        content: `以下是刚刚通过 Bing 搜索到的实时网页结果，可作为回答外部信息问题的参考。` +
+          `请优先使用其中与问题相关的事实，并在回答末尾用 [1][2] 形式列出实际引用的来源和链接；` +
+          `如果结果与问题无关或不足以回答，请明确说明“联网结果不足”，不要编造来源。\n\n${webContext}`
       });
     }
 

@@ -10,6 +10,7 @@ import { SpeechService } from '../service/SpeechService';
 import { DeepSeekSpeechService } from '../service/DeepSeekSpeechService';
 import { ImportService } from '../service/ImportService';
 import { DshSyncService } from '../service/DshSyncService';
+import { WebSearchService, WebSearchItem } from '../service/WebSearchService';
 
 const ACCENT: string = '#4D6BFE';
 const ACCENT_SOFT: string = '#EEF1FF';
@@ -73,6 +74,7 @@ struct Index {
   @State draftDshToken: string = '';
   @State draftThemeMode: string = 'system';
   @State draftFontScale: number = 1.0;
+  @State draftWebSearchEnabled: boolean = true;
 
   @State conversationMenuId: string = '';
   @State messageMenuId: string = '';
@@ -87,6 +89,7 @@ struct Index {
   private deepSeekSpeechService: DeepSeekSpeechService = new DeepSeekSpeechService();
   private importService: ImportService = new ImportService();
   private dshSyncService: DshSyncService = new DshSyncService();
+  private webSearchService: WebSearchService = new WebSearchService();
   private scroller: Scroller = new Scroller();
 
   aboutToAppear(): void {
@@ -315,6 +318,12 @@ struct Index {
       if (a.pinned !== b.pinned) {
         return a.pinned ? -1 : 1;
       }
+      if (a.id === this.activeId && b.id !== this.activeId) {
+        return -1;
+      }
+      if (b.id === this.activeId && a.id !== this.activeId) {
+        return 1;
+      }
       return b.updatedAt - a.updatedAt;
     });
     this.conversations = sorted;
@@ -449,10 +458,6 @@ struct Index {
   }
 
   private selectConversation(id: string): void {
-    if (this.loading) {
-      this.toast('请等待当前回复完成后再切换对话');
-      return;
-    }
     if (this.pickingImages) {
       this.toast('图片处理中，请稍候');
       return;
@@ -473,10 +478,6 @@ struct Index {
   }
 
   private newConversation(): void {
-    if (this.loading) {
-      this.toast('请等待当前回复完成');
-      return;
-    }
     if (this.pickingImages) {
       this.toast('图片处理中，请稍候');
       return;
@@ -763,10 +764,6 @@ struct Index {
   }
 
   private goAdjacentConversation(delta: number): void {
-    if (this.loading) {
-      this.toast('请等待当前回复完成');
-      return;
-    }
     const index: number = this.conversationIndex();
     const target: number = index + delta;
     if (target < 0) {
@@ -791,8 +788,51 @@ struct Index {
     return conversation;
   }
 
+  private needsWebSearch(text: string): boolean {
+    const value: string = text.toLowerCase();
+    const keywords: string[] = [
+      '最新', '今天', '现在', '当前', '实时', '新闻', '搜索', '搜一下', '查一下', '查询',
+      '查找', '找一下', '找找', '外部', '网页', '网上', '资料', '数据', '价格', '天气',
+      '股价', '汇率', '官网', '链接', '来源', '发布', '版本', '2025', '2026',
+      'latest', 'today', 'news', 'search', 'web', 'price', 'weather', 'stock'
+    ];
+    for (let i = 0; i < keywords.length; i++) {
+      if (value.includes(keywords[i])) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private buildWebContext(items: WebSearchItem[]): string {
+    if (items.length === 0) {
+      return '（本次联网搜索没有返回可用结果，请明确告诉用户没有查到，不要声称自己具备联网功能。）';
+    }
+    let context: string = '';
+    for (let i = 0; i < items.length; i++) {
+      context += `[${i + 1}] ${items[i].title}\n${items[i].url}\n${items[i].snippet}\n\n`;
+    }
+    return context;
+  }
+
+  private async collectWebContext(text: string): Promise<string> {
+    if (!this.settings.webSearchEnabled || !this.needsWebSearch(text)) {
+      return '';
+    }
+    try {
+      const items: WebSearchItem[] = await this.webSearchService.search(text);
+      return this.buildWebContext(items);
+    } catch (error) {
+      const businessError = error as Error;
+      console.error(`联网搜索失败: ${businessError.message}`);
+      this.toast('联网搜索失败，将继续使用模型知识回答');
+      return '';
+    }
+  }
+
   private async sendMessage(): Promise<void> {
     if (this.loading) {
+      this.toast('请等待上一条回复完成');
       return;
     }
     if (this.pickingImages) {
@@ -822,6 +862,10 @@ struct Index {
     conversation.messages.push(userMessage);
     conversation.messages.push(assistantMessage);
     conversation.updatedAt = Date.now();
+    if (this.settings.webSearchEnabled && this.needsWebSearch(text)) {
+      assistantMessage.content = '正在联网搜索…';
+      assistantMessage.rev = Date.now();
+    }
     if (conversation.title === '新对话') {
       conversation.title = this.makeTitle(text, images.length);
     }
@@ -834,21 +878,22 @@ struct Index {
     this.persistConversations();
     this.scrollToBottom();
 
-    await this.requestReply(conversation, assistantMessage, userMessage);
+    const webContext: string = await this.collectWebContext(text);
+    await this.requestReply(conversation, assistantMessage, userMessage, webContext);
   }
 
   private async requestReply(conversation: Conversation, assistantMessage: ChatMessage,
-    lastUserMessage: ChatMessage): Promise<void> {
+    lastUserMessage: ChatMessage, webContext: string = ''): Promise<void> {
     try {
       const history: ChatMessage[] = conversation.messages.filter((item: ChatMessage) => {
         return item.id !== assistantMessage.id;
       });
-      const answer: string = await this.aiService.send(this.settings, history, lastUserMessage);
+      const answer: string = await this.aiService.send(this.settings, history, lastUserMessage, webContext);
       assistantMessage.content = answer;
       assistantMessage.status = 'done';
       assistantMessage.rev = Date.now();
       conversation.updatedAt = Date.now();
-      if (this.settings.autoRead) {
+      if (this.settings.autoRead && this.activeId === conversation.id) {
         this.startReading(assistantMessage);
       }
     } catch (error) {
@@ -862,7 +907,9 @@ struct Index {
       this.loading = false;
       this.touchConversation(conversation);
       this.persistConversations();
-      this.scrollToBottom();
+      if (this.activeId === conversation.id) {
+        this.scrollToBottom();
+      }
     }
   }
 
@@ -1079,6 +1126,7 @@ struct Index {
     this.draftDshToken = this.settings.dshToken;
     this.draftThemeMode = this.settings.themeMode;
     this.draftFontScale = this.settings.fontScale;
+    this.draftWebSearchEnabled = this.settings.webSearchEnabled;
     this.showSettings = true;
   }
 
@@ -1100,6 +1148,7 @@ struct Index {
     next.dshToken = this.draftDshToken.trim();
     next.themeMode = this.draftThemeMode;
     next.fontScale = this.draftFontScale;
+    next.webSearchEnabled = this.draftWebSearchEnabled;
     const port: number = parseInt(this.draftDshPort, 10);
     next.dshPort = Number.isNaN(port) || port <= 0 || port > 65535 ? 17860 : port;
     return next;
@@ -2194,6 +2243,7 @@ struct Index {
           .padding({ left: 9, right: 9, top: 8, bottom: 8 })
           .maxLength(8000)
           .maxLines(5)
+          .barState(BarState.Auto)
           .onChange((value: string) => {
             this.inputText = value;
           })
@@ -2459,6 +2509,35 @@ struct Index {
               .onChange((value: string) => {
                 this.draftSystemPrompt = value;
               })
+
+            Divider()
+              .strokeWidth(0.5)
+              .color(this.colorLine())
+              .margin({ top: 20, bottom: 16 })
+
+            this.settingsSection('联网搜索')
+
+            Row() {
+              Column() {
+                Text('自动联网搜索')
+                  .fontSize(this.fs(14))
+                  .fontColor(this.colorTextMain())
+                Text('问题涉及最新信息、资料或网页时，先用 Bing 搜索再回答；查询会发送到 Bing。')
+                  .fontSize(this.fs(10))
+                  .fontColor(this.colorTextFaint())
+                  .margin({ top: 2 })
+              }
+              .alignItems(HorizontalAlign.Start)
+              .layoutWeight(1)
+
+              Toggle({ type: ToggleType.Switch, isOn: this.draftWebSearchEnabled })
+                .selectedColor(ACCENT)
+                .onChange((isOn: boolean) => {
+                  this.draftWebSearchEnabled = isOn;
+                })
+            }
+            .width('100%')
+            .margin({ top: 4 })
 
             Divider()
               .strokeWidth(0.5)
