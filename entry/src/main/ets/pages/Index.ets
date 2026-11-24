@@ -474,6 +474,8 @@ struct Index {
     this.stopReading();
     this.inputText = '';
     this.activeId = id;
+    this.sortConversations();
+    this.persistConversations();
     this.scrollToBottom();
   }
 
@@ -2242,8 +2244,7 @@ struct Index {
           .backgroundColor(Color.Transparent)
           .padding({ left: 9, right: 9, top: 8, bottom: 8 })
           .maxLength(8000)
-          .maxLines(5)
-          .barState(BarState.Auto)
+          .barState(BarState.On)
           .onChange((value: string) => {
             this.inputText = value;
           })
