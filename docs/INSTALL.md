@@ -231,7 +231,7 @@ https://github.com/allwell997/HongYu-HarmonyOS-AI/blob/main/DISCLAIMER.md
 
 - 项目主页：<https://github.com/allwell997/HongYu-HarmonyOS-AI>
 - 问题反馈：GitHub Issues
-- 源码下载：<https://github.com/allwell997/HongYu-HarmonyOS-AI/releases/tag/v1.0.0>
+- 源码下载：<https://github.com/allwell997/HongYu-HarmonyOS-AI/releases/latest>
 - 客服邮箱：allwell997@163.com
 
 > 反馈时请提供：设备型号、HarmonyOS 版本、鸿语版本、操作步骤、错误提示截图。不要发送 API Key。
